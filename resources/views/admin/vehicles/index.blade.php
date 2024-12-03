@@ -70,42 +70,6 @@
                                     {{ trans('cruds.vehicle.fields.buyer_company') }}
                                 </th>
                                 <th>
-                                    {{ trans('cruds.vehicle.fields.purchase_and_sale_agreement') }}
-                                </th>
-                                <th>
-                                    {{ trans('cruds.vehicle.fields.copy_of_the_citizen_card') }}
-                                </th>
-                                <th>
-                                    {{ trans('cruds.vehicle.fields.tax_identification_card') }}
-                                </th>
-                                <th>
-                                    {{ trans('cruds.vehicle.fields.copy_of_the_stamp_duty_receipt') }}
-                                </th>
-                                <th>
-                                    {{ trans('cruds.vehicle.fields.vehicle_registration_document') }}
-                                </th>
-                                <th>
-                                    {{ trans('cruds.vehicle.fields.vehicle_ownership_title') }}
-                                </th>
-                                <th>
-                                    {{ trans('cruds.vehicle.fields.vehicle_keys') }}
-                                </th>
-                                <th>
-                                    {{ trans('cruds.vehicle.fields.vehicle_manuals') }}
-                                </th>
-                                <th>
-                                    {{ trans('cruds.vehicle.fields.release_of_reservation_or_mortgage') }}
-                                </th>
-                                <th>
-                                    {{ trans('cruds.vehicle.fields.leasing_agreement') }}
-                                </th>
-                                <th>
-                                    {{ trans('cruds.vehicle.fields.date') }}
-                                </th>
-                                <th>
-                                    {{ trans('cruds.vehicle.fields.documents') }}
-                                </th>
-                                <th>
                                     &nbsp;
                                 </th>
                             </tr>
@@ -180,30 +144,6 @@
                                 </td>
                                 <td>
                                 </td>
-                                <td>
-                                </td>
-                                <td>
-                                </td>
-                                <td>
-                                </td>
-                                <td>
-                                </td>
-                                <td>
-                                </td>
-                                <td>
-                                </td>
-                                <td>
-                                </td>
-                                <td>
-                                </td>
-                                <td>
-                                </td>
-                                <td>
-                                </td>
-                                <td>
-                                </td>
-                                <td>
-                                </td>
                             </tr>
                         </thead>
                     </table>
@@ -274,18 +214,6 @@
 { data: 'seller_company_name', name: 'seller_company.name' },
 { data: 'buyer_client_name', name: 'buyer_client.name' },
 { data: 'buyer_company_name', name: 'buyer_company.name' },
-{ data: 'purchase_and_sale_agreement', name: 'purchase_and_sale_agreement' },
-{ data: 'copy_of_the_citizen_card', name: 'copy_of_the_citizen_card' },
-{ data: 'tax_identification_card', name: 'tax_identification_card' },
-{ data: 'copy_of_the_stamp_duty_receipt', name: 'copy_of_the_stamp_duty_receipt' },
-{ data: 'vehicle_registration_document', name: 'vehicle_registration_document' },
-{ data: 'vehicle_ownership_title', name: 'vehicle_ownership_title' },
-{ data: 'vehicle_keys', name: 'vehicle_keys' },
-{ data: 'vehicle_manuals', name: 'vehicle_manuals' },
-{ data: 'release_of_reservation_or_mortgage', name: 'release_of_reservation_or_mortgage' },
-{ data: 'leasing_agreement', name: 'leasing_agreement' },
-{ data: 'date', name: 'date' },
-{ data: 'documents', name: 'documents', sortable: false, searchable: false },
 { data: 'actions', name: '{{ trans('global.actions') }}' }
     ],
     orderCellsTop: true,
