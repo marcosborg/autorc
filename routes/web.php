@@ -68,6 +68,19 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.', 'namespace' => 'Admin', 'mi
     Route::post('vehicles/parse-csv-import', 'VehicleController@parseCsvImport')->name('vehicles.parseCsvImport');
     Route::post('vehicles/process-csv-import', 'VehicleController@processCsvImport')->name('vehicles.processCsvImport');
     Route::resource('vehicles', 'VehicleController');
+    Route::post('vehicles/new-payment', 'VehicleController@newPayment');
+
+    // Suplier
+    Route::delete('supliers/destroy', 'SuplierController@massDestroy')->name('supliers.massDestroy');
+    Route::post('supliers/parse-csv-import', 'SuplierController@parseCsvImport')->name('supliers.parseCsvImport');
+    Route::post('supliers/process-csv-import', 'SuplierController@processCsvImport')->name('supliers.processCsvImport');
+    Route::resource('supliers', 'SuplierController');
+
+    // Payment Status
+    Route::delete('payment-statuses/destroy', 'PaymentStatusController@massDestroy')->name('payment-statuses.massDestroy');
+    Route::post('payment-statuses/parse-csv-import', 'PaymentStatusController@parseCsvImport')->name('payment-statuses.parseCsvImport');
+    Route::post('payment-statuses/process-csv-import', 'PaymentStatusController@processCsvImport')->name('payment-statuses.processCsvImport');
+    Route::resource('payment-statuses', 'PaymentStatusController');
 
     Route::get('system-calendar', 'SystemCalendarController@index')->name('systemCalendar');
     Route::get('global-search', 'GlobalSearchController@search')->name('globalSearch');

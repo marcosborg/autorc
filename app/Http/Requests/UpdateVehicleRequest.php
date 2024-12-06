@@ -60,6 +60,16 @@ class UpdateVehicleRequest extends FormRequest
             'documents' => [
                 'array',
             ],
+            'photos' => [
+                'array',
+            ],
+            'invoice' => [
+                'array',
+            ],
+            'payment_date' => [
+                'date_format:' . config('panel.date_format'),
+                'nullable',
+            ],
         ];
     }
 }

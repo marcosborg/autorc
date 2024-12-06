@@ -20,7 +20,7 @@ class VehicleApiController extends Controller
     {
         abort_if(Gate::denies('vehicle_access'), Response::HTTP_FORBIDDEN, '403 Forbidden');
 
-        return new VehicleResource(Vehicle::with(['brand', 'seller_client', 'seller_company', 'buyer_client', 'buyer_company'])->get());
+        return new VehicleResource(Vehicle::with(['brand', 'seller_client', 'seller_company', 'buyer_client', 'buyer_company', 'suplier', 'payment_status'])->get());
     }
 
     public function store(StoreVehicleRequest $request)
@@ -29,6 +29,14 @@ class VehicleApiController extends Controller
 
         foreach ($request->input('documents', []) as $file) {
             $vehicle->addMedia(storage_path('tmp/uploads/' . basename($file)))->toMediaCollection('documents');
+        }
+
+        foreach ($request->input('photos', []) as $file) {
+            $vehicle->addMedia(storage_path('tmp/uploads/' . basename($file)))->toMediaCollection('photos');
+        }
+
+        foreach ($request->input('invoice', []) as $file) {
+            $vehicle->addMedia(storage_path('tmp/uploads/' . basename($file)))->toMediaCollection('invoice');
         }
 
         return (new VehicleResource($vehicle))
@@ -40,7 +48,7 @@ class VehicleApiController extends Controller
     {
         abort_if(Gate::denies('vehicle_show'), Response::HTTP_FORBIDDEN, '403 Forbidden');
 
-        return new VehicleResource($vehicle->load(['brand', 'seller_client', 'seller_company', 'buyer_client', 'buyer_company']));
+        return new VehicleResource($vehicle->load(['brand', 'seller_client', 'seller_company', 'buyer_client', 'buyer_company', 'suplier', 'payment_status']));
     }
 
     public function update(UpdateVehicleRequest $request, Vehicle $vehicle)
@@ -58,6 +66,34 @@ class VehicleApiController extends Controller
         foreach ($request->input('documents', []) as $file) {
             if (count($media) === 0 || ! in_array($file, $media)) {
                 $vehicle->addMedia(storage_path('tmp/uploads/' . basename($file)))->toMediaCollection('documents');
+            }
+        }
+
+        if (count($vehicle->photos) > 0) {
+            foreach ($vehicle->photos as $media) {
+                if (! in_array($media->file_name, $request->input('photos', []))) {
+                    $media->delete();
+                }
+            }
+        }
+        $media = $vehicle->photos->pluck('file_name')->toArray();
+        foreach ($request->input('photos', []) as $file) {
+            if (count($media) === 0 || ! in_array($file, $media)) {
+                $vehicle->addMedia(storage_path('tmp/uploads/' . basename($file)))->toMediaCollection('photos');
+            }
+        }
+
+        if (count($vehicle->invoice) > 0) {
+            foreach ($vehicle->invoice as $media) {
+                if (! in_array($media->file_name, $request->input('invoice', []))) {
+                    $media->delete();
+                }
+            }
+        }
+        $media = $vehicle->invoice->pluck('file_name')->toArray();
+        foreach ($request->input('invoice', []) as $file) {
+            if (count($media) === 0 || ! in_array($file, $media)) {
+                $vehicle->addMedia(storage_path('tmp/uploads/' . basename($file)))->toMediaCollection('invoice');
             }
         }
 

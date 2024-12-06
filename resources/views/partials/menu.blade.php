@@ -103,6 +103,28 @@
                                 </a>
                             </li>
                         @endcan
+                        @can('suplier_access')
+                            <li class="{{ request()->is("admin/supliers") || request()->is("admin/supliers/*") ? "active" : "" }}">
+                                <a href="{{ route("admin.supliers.index") }}">
+                                    <i class="fa-fw fas fa-building">
+
+                                    </i>
+                                    <span>{{ trans('cruds.suplier.title') }}</span>
+
+                                </a>
+                            </li>
+                        @endcan
+                        @can('payment_status_access')
+                            <li class="{{ request()->is("admin/payment-statuses") || request()->is("admin/payment-statuses/*") ? "active" : "" }}">
+                                <a href="{{ route("admin.payment-statuses.index") }}">
+                                    <i class="fa-fw far fa-credit-card">
+
+                                    </i>
+                                    <span>{{ trans('cruds.paymentStatus.title') }}</span>
+
+                                </a>
+                            </li>
+                        @endcan
                     </ul>
                 </li>
             @endcan

@@ -11,6 +11,8 @@ use App\Http\Requests\UpdateVehicleRequest;
 use App\Models\Brand;
 use App\Models\Client;
 use App\Models\Company;
+use App\Models\PaymentStatus;
+use App\Models\Suplier;
 use App\Models\Vehicle;
 use Gate;
 use Illuminate\Http\Request;
@@ -27,7 +29,7 @@ class VehicleController extends Controller
         abort_if(Gate::denies('vehicle_access'), Response::HTTP_FORBIDDEN, '403 Forbidden');
 
         if ($request->ajax()) {
-            $query = Vehicle::with(['brand', 'seller_client', 'seller_company', 'buyer_client', 'buyer_company'])->select(sprintf('%s.*', (new Vehicle)->table));
+            $query = Vehicle::with(['brand', 'seller_client', 'seller_company', 'buyer_client', 'buyer_company', 'suplier', 'payment_status'])->select(sprintf('%s.*', (new Vehicle)->table));
             $table = Datatables::of($query);
 
             $table->addColumn('placeholder', '&nbsp;');
@@ -135,17 +137,56 @@ class VehicleController extends Controller
 
                 return implode(', ', $links);
             });
+            $table->editColumn('purchase_price', function ($row) {
+                return $row->purchase_price ? $row->purchase_price : '';
+            });
+            $table->editColumn('photos', function ($row) {
+                if (! $row->photos) {
+                    return '';
+                }
+                $links = [];
+                foreach ($row->photos as $media) {
+                    $links[] = '<a href="' . $media->getUrl() . '" target="_blank"><img src="' . $media->getUrl('thumb') . '" width="50px" height="50px"></a>';
+                }
 
-            $table->rawColumns(['actions', 'placeholder', 'brand', 'seller_client', 'seller_company', 'buyer_client', 'buyer_company', 'purchase_and_sale_agreement', 'copy_of_the_citizen_card', 'tax_identification_card', 'copy_of_the_stamp_duty_receipt', 'vehicle_registration_document', 'vehicle_ownership_title', 'vehicle_keys', 'vehicle_manuals', 'release_of_reservation_or_mortgage', 'leasing_agreement', 'documents']);
+                return implode(' ', $links);
+            });
+            $table->addColumn('suplier_name', function ($row) {
+                return $row->suplier ? $row->suplier->name : '';
+            });
+
+            $table->editColumn('invoice', function ($row) {
+                if (! $row->invoice) {
+                    return '';
+                }
+                $links = [];
+                foreach ($row->invoice as $media) {
+                    $links[] = '<a href="' . $media->getUrl() . '" target="_blank">' . trans('global.downloadFile') . '</a>';
+                }
+
+                return implode(', ', $links);
+            });
+
+            $table->addColumn('payment_status_name', function ($row) {
+                return $row->payment_status ? $row->payment_status->name : '';
+            });
+
+            $table->editColumn('amount_paid', function ($row) {
+                return $row->amount_paid ? $row->amount_paid : '';
+            });
+
+            $table->rawColumns(['actions', 'placeholder', 'brand', 'seller_client', 'seller_company', 'buyer_client', 'buyer_company', 'purchase_and_sale_agreement', 'copy_of_the_citizen_card', 'tax_identification_card', 'copy_of_the_stamp_duty_receipt', 'vehicle_registration_document', 'vehicle_ownership_title', 'vehicle_keys', 'vehicle_manuals', 'release_of_reservation_or_mortgage', 'leasing_agreement', 'documents', 'photos', 'suplier', 'invoice', 'payment_status']);
 
             return $table->make(true);
         }
 
-        $brands    = Brand::get();
-        $clients   = Client::get();
-        $companies = Company::get();
+        $brands           = Brand::get();
+        $clients          = Client::get();
+        $companies        = Company::get();
+        $supliers         = Suplier::get();
+        $payment_statuses = PaymentStatus::get();
 
-        return view('admin.vehicles.index', compact('brands', 'clients', 'companies'));
+        return view('admin.vehicles.index', compact('brands', 'clients', 'companies', 'supliers', 'payment_statuses'));
     }
 
     public function create()
@@ -162,7 +203,11 @@ class VehicleController extends Controller
 
         $buyer_companies = Company::pluck('name', 'id')->prepend(trans('global.pleaseSelect'), '');
 
-        return view('admin.vehicles.create', compact('brands', 'buyer_clients', 'buyer_companies', 'seller_clients', 'seller_companies'));
+        $supliers = Suplier::pluck('name', 'id')->prepend(trans('global.pleaseSelect'), '');
+
+        $payment_statuses = PaymentStatus::pluck('name', 'id')->prepend(trans('global.pleaseSelect'), '');
+
+        return view('admin.vehicles.create', compact('brands', 'buyer_clients', 'buyer_companies', 'payment_statuses', 'seller_clients', 'seller_companies', 'supliers'));
     }
 
     public function store(StoreVehicleRequest $request)
@@ -171,6 +216,14 @@ class VehicleController extends Controller
 
         foreach ($request->input('documents', []) as $file) {
             $vehicle->addMedia(storage_path('tmp/uploads/' . basename($file)))->toMediaCollection('documents');
+        }
+
+        foreach ($request->input('photos', []) as $file) {
+            $vehicle->addMedia(storage_path('tmp/uploads/' . basename($file)))->toMediaCollection('photos');
+        }
+
+        foreach ($request->input('invoice', []) as $file) {
+            $vehicle->addMedia(storage_path('tmp/uploads/' . basename($file)))->toMediaCollection('invoice');
         }
 
         if ($media = $request->input('ck-media', false)) {
@@ -194,9 +247,13 @@ class VehicleController extends Controller
 
         $buyer_companies = Company::pluck('name', 'id')->prepend(trans('global.pleaseSelect'), '');
 
-        $vehicle->load('brand', 'seller_client', 'seller_company', 'buyer_client', 'buyer_company');
+        $supliers = Suplier::pluck('name', 'id')->prepend(trans('global.pleaseSelect'), '');
 
-        return view('admin.vehicles.edit', compact('brands', 'buyer_clients', 'buyer_companies', 'seller_clients', 'seller_companies', 'vehicle'));
+        $payment_statuses = PaymentStatus::pluck('name', 'id')->prepend(trans('global.pleaseSelect'), '');
+
+        $vehicle->load('brand', 'seller_client', 'seller_company', 'buyer_client', 'buyer_company', 'suplier', 'payment_status');
+
+        return view('admin.vehicles.edit', compact('brands', 'buyer_clients', 'buyer_companies', 'payment_statuses', 'seller_clients', 'seller_companies', 'supliers', 'vehicle'));
     }
 
     public function update(UpdateVehicleRequest $request, Vehicle $vehicle)
@@ -217,6 +274,34 @@ class VehicleController extends Controller
             }
         }
 
+        if (count($vehicle->photos) > 0) {
+            foreach ($vehicle->photos as $media) {
+                if (! in_array($media->file_name, $request->input('photos', []))) {
+                    $media->delete();
+                }
+            }
+        }
+        $media = $vehicle->photos->pluck('file_name')->toArray();
+        foreach ($request->input('photos', []) as $file) {
+            if (count($media) === 0 || ! in_array($file, $media)) {
+                $vehicle->addMedia(storage_path('tmp/uploads/' . basename($file)))->toMediaCollection('photos');
+            }
+        }
+
+        if (count($vehicle->invoice) > 0) {
+            foreach ($vehicle->invoice as $media) {
+                if (! in_array($media->file_name, $request->input('invoice', []))) {
+                    $media->delete();
+                }
+            }
+        }
+        $media = $vehicle->invoice->pluck('file_name')->toArray();
+        foreach ($request->input('invoice', []) as $file) {
+            if (count($media) === 0 || ! in_array($file, $media)) {
+                $vehicle->addMedia(storage_path('tmp/uploads/' . basename($file)))->toMediaCollection('invoice');
+            }
+        }
+
         return redirect()->route('admin.vehicles.index');
     }
 
@@ -224,7 +309,7 @@ class VehicleController extends Controller
     {
         abort_if(Gate::denies('vehicle_show'), Response::HTTP_FORBIDDEN, '403 Forbidden');
 
-        $vehicle->load('brand', 'seller_client', 'seller_company', 'buyer_client', 'buyer_company');
+        $vehicle->load('brand', 'seller_client', 'seller_company', 'buyer_client', 'buyer_company', 'suplier', 'payment_status');
 
         return view('admin.vehicles.show', compact('vehicle'));
     }

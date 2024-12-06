@@ -28,4 +28,10 @@ Route::group(['prefix' => 'v1', 'as' => 'api.', 'namespace' => 'Api\V1\Admin', '
     // Vehicle
     Route::post('vehicles/media', 'VehicleApiController@storeMedia')->name('vehicles.storeMedia');
     Route::apiResource('vehicles', 'VehicleApiController');
+
+    // Suplier
+    Route::apiResource('supliers', 'SuplierApiController');
+
+    // Payment Status
+    Route::apiResource('payment-statuses', 'PaymentStatusApiController');
 });

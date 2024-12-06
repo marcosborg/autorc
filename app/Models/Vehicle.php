@@ -56,6 +56,11 @@ class Vehicle extends Model implements HasMedia
         'date',
         'pending',
         'additional_items',
+        'purchase_price',
+        'suplier_id',
+        'payment_date',
+        'payment_status_id',
+        'amount_paid',
         'created_at',
         'updated_at',
         'deleted_at',
@@ -120,5 +125,42 @@ class Vehicle extends Model implements HasMedia
     public function getDocumentsAttribute()
     {
         return $this->getMedia('documents');
+    }
+
+    public function getPhotosAttribute()
+    {
+        $files = $this->getMedia('photos');
+        $files->each(function ($item) {
+            $item->url       = $item->getUrl();
+            $item->thumbnail = $item->getUrl('thumb');
+            $item->preview   = $item->getUrl('preview');
+        });
+
+        return $files;
+    }
+
+    public function suplier()
+    {
+        return $this->belongsTo(Suplier::class, 'suplier_id');
+    }
+
+    public function getInvoiceAttribute()
+    {
+        return $this->getMedia('invoice');
+    }
+
+    public function getPaymentDateAttribute($value)
+    {
+        return $value ? Carbon::parse($value)->format(config('panel.date_format')) : null;
+    }
+
+    public function setPaymentDateAttribute($value)
+    {
+        $this->attributes['payment_date'] = $value ? Carbon::createFromFormat(config('panel.date_format'), $value)->format('Y-m-d') : null;
+    }
+
+    public function payment_status()
+    {
+        return $this->belongsTo(PaymentStatus::class, 'payment_status_id');
     }
 }
