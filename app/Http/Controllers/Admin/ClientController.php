@@ -8,7 +8,6 @@ use App\Http\Requests\MassDestroyClientRequest;
 use App\Http\Requests\StoreClientRequest;
 use App\Http\Requests\UpdateClientRequest;
 use App\Models\Client;
-use App\Models\Company;
 use App\Models\Country;
 use Gate;
 use Illuminate\Http\Request;
@@ -24,7 +23,7 @@ class ClientController extends Controller
         abort_if(Gate::denies('client_access'), Response::HTTP_FORBIDDEN, '403 Forbidden');
 
         if ($request->ajax()) {
-            $query = Client::with(['company', 'country'])->select(sprintf('%s.*', (new Client)->table));
+            $query = Client::with(['country', 'company_country'])->select(sprintf('%s.*', (new Client)->table));
             $table = Datatables::of($query);
 
             $table->addColumn('placeholder', '&nbsp;');
@@ -54,10 +53,6 @@ class ClientController extends Controller
             $table->editColumn('vat', function ($row) {
                 return $row->vat ? $row->vat : '';
             });
-            $table->addColumn('company_name', function ($row) {
-                return $row->company ? $row->company->name : '';
-            });
-
             $table->editColumn('address', function ($row) {
                 return $row->address ? $row->address : '';
             });
@@ -77,26 +72,50 @@ class ClientController extends Controller
                 return $row->country ? $row->country->name : '';
             });
 
-            $table->rawColumns(['actions', 'placeholder', 'company', 'country']);
+            $table->editColumn('company_name', function ($row) {
+                return $row->company_name ? $row->company_name : '';
+            });
+            $table->editColumn('company_vat', function ($row) {
+                return $row->company_vat ? $row->company_vat : '';
+            });
+            $table->editColumn('company_address', function ($row) {
+                return $row->company_address ? $row->company_address : '';
+            });
+            $table->editColumn('company_location', function ($row) {
+                return $row->company_location ? $row->company_location : '';
+            });
+            $table->editColumn('company_zip', function ($row) {
+                return $row->company_zip ? $row->company_zip : '';
+            });
+            $table->editColumn('company_phone', function ($row) {
+                return $row->company_phone ? $row->company_phone : '';
+            });
+            $table->editColumn('company_email', function ($row) {
+                return $row->company_email ? $row->company_email : '';
+            });
+            $table->addColumn('company_country_name', function ($row) {
+                return $row->company_country ? $row->company_country->name : '';
+            });
+
+            $table->rawColumns(['actions', 'placeholder', 'country', 'company_country']);
 
             return $table->make(true);
         }
 
-        $companies = Company::get();
         $countries = Country::get();
 
-        return view('admin.clients.index', compact('companies', 'countries'));
+        return view('admin.clients.index', compact('countries'));
     }
 
     public function create()
     {
         abort_if(Gate::denies('client_create'), Response::HTTP_FORBIDDEN, '403 Forbidden');
 
-        $companies = Company::pluck('name', 'id')->prepend(trans('global.pleaseSelect'), '');
-
         $countries = Country::pluck('name', 'id')->prepend(trans('global.pleaseSelect'), '');
 
-        return view('admin.clients.create', compact('companies', 'countries'));
+        $company_countries = Country::pluck('name', 'id')->prepend(trans('global.pleaseSelect'), '');
+
+        return view('admin.clients.create', compact('company_countries', 'countries'));
     }
 
     public function store(StoreClientRequest $request)
@@ -110,13 +129,13 @@ class ClientController extends Controller
     {
         abort_if(Gate::denies('client_edit'), Response::HTTP_FORBIDDEN, '403 Forbidden');
 
-        $companies = Company::pluck('name', 'id')->prepend(trans('global.pleaseSelect'), '');
-
         $countries = Country::pluck('name', 'id')->prepend(trans('global.pleaseSelect'), '');
 
-        $client->load('company', 'country');
+        $company_countries = Country::pluck('name', 'id')->prepend(trans('global.pleaseSelect'), '');
 
-        return view('admin.clients.edit', compact('client', 'companies', 'countries'));
+        $client->load('country', 'company_country');
+
+        return view('admin.clients.edit', compact('client', 'company_countries', 'countries'));
     }
 
     public function update(UpdateClientRequest $request, Client $client)
@@ -130,7 +149,7 @@ class ClientController extends Controller
     {
         abort_if(Gate::denies('client_show'), Response::HTTP_FORBIDDEN, '403 Forbidden');
 
-        $client->load('company', 'country');
+        $client->load('country', 'company_country');
 
         return view('admin.clients.show', compact('client'));
     }

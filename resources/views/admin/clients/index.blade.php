@@ -37,9 +37,6 @@
                                     {{ trans('cruds.client.fields.vat') }}
                                 </th>
                                 <th>
-                                    {{ trans('cruds.client.fields.company') }}
-                                </th>
-                                <th>
                                     {{ trans('cruds.client.fields.address') }}
                                 </th>
                                 <th>
@@ -56,6 +53,30 @@
                                 </th>
                                 <th>
                                     {{ trans('cruds.client.fields.country') }}
+                                </th>
+                                <th>
+                                    {{ trans('cruds.client.fields.company_name') }}
+                                </th>
+                                <th>
+                                    {{ trans('cruds.client.fields.company_vat') }}
+                                </th>
+                                <th>
+                                    {{ trans('cruds.client.fields.company_address') }}
+                                </th>
+                                <th>
+                                    {{ trans('cruds.client.fields.company_location') }}
+                                </th>
+                                <th>
+                                    {{ trans('cruds.client.fields.company_zip') }}
+                                </th>
+                                <th>
+                                    {{ trans('cruds.client.fields.company_phone') }}
+                                </th>
+                                <th>
+                                    {{ trans('cruds.client.fields.company_email') }}
+                                </th>
+                                <th>
+                                    {{ trans('cruds.client.fields.company_country') }}
                                 </th>
                                 <th>
                                     {{ trans('cruds.client.fields.created_at') }}
@@ -77,12 +98,33 @@
                                     <input class="search" type="text" placeholder="{{ trans('global.search') }}">
                                 </td>
                                 <td>
+                                    <input class="search" type="text" placeholder="{{ trans('global.search') }}">
+                                </td>
+                                <td>
+                                    <input class="search" type="text" placeholder="{{ trans('global.search') }}">
+                                </td>
+                                <td>
+                                    <input class="search" type="text" placeholder="{{ trans('global.search') }}">
+                                </td>
+                                <td>
+                                    <input class="search" type="text" placeholder="{{ trans('global.search') }}">
+                                </td>
+                                <td>
+                                    <input class="search" type="text" placeholder="{{ trans('global.search') }}">
+                                </td>
+                                <td>
                                     <select class="search">
                                         <option value>{{ trans('global.all') }}</option>
-                                        @foreach($companies as $key => $item)
+                                        @foreach($countries as $key => $item)
                                             <option value="{{ $item->name }}">{{ $item->name }}</option>
                                         @endforeach
                                     </select>
+                                </td>
+                                <td>
+                                    <input class="search" type="text" placeholder="{{ trans('global.search') }}">
+                                </td>
+                                <td>
+                                    <input class="search" type="text" placeholder="{{ trans('global.search') }}">
                                 </td>
                                 <td>
                                     <input class="search" type="text" placeholder="{{ trans('global.search') }}">
@@ -171,13 +213,20 @@
 { data: 'id', name: 'id' },
 { data: 'name', name: 'name' },
 { data: 'vat', name: 'vat' },
-{ data: 'company_name', name: 'company.name' },
 { data: 'address', name: 'address' },
 { data: 'location', name: 'location' },
 { data: 'zip', name: 'zip' },
 { data: 'phone', name: 'phone' },
 { data: 'email', name: 'email' },
 { data: 'country_name', name: 'country.name' },
+{ data: 'company_name', name: 'company_name' },
+{ data: 'company_vat', name: 'company_vat' },
+{ data: 'company_address', name: 'company_address' },
+{ data: 'company_location', name: 'company_location' },
+{ data: 'company_zip', name: 'company_zip' },
+{ data: 'company_phone', name: 'company_phone' },
+{ data: 'company_email', name: 'company_email' },
+{ data: 'company_country_name', name: 'company_country.name' },
 { data: 'created_at', name: 'created_at' },
 { data: 'actions', name: '{{ trans('global.actions') }}' }
     ],

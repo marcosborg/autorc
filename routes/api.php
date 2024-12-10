@@ -10,14 +10,8 @@ Route::group(['prefix' => 'v1', 'as' => 'api.', 'namespace' => 'Api\V1\Admin', '
     // Users
     Route::apiResource('users', 'UsersApiController');
 
-    // Company
-    Route::apiResource('companies', 'CompanyApiController');
-
     // Countries
     Route::apiResource('countries', 'CountriesApiController');
-
-    // Company Type
-    Route::apiResource('company-types', 'CompanyTypeApiController');
 
     // Client
     Route::apiResource('clients', 'ClientApiController');

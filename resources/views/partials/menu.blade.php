@@ -81,17 +81,6 @@
                                 </a>
                             </li>
                         @endcan
-                        @can('company_type_access')
-                            <li class="{{ request()->is("admin/company-types") || request()->is("admin/company-types/*") ? "active" : "" }}">
-                                <a href="{{ route("admin.company-types.index") }}">
-                                    <i class="fa-fw fas fa-check-double">
-
-                                    </i>
-                                    <span>{{ trans('cruds.companyType.title') }}</span>
-
-                                </a>
-                            </li>
-                        @endcan
                         @can('brand_access')
                             <li class="{{ request()->is("admin/brands") || request()->is("admin/brands/*") ? "active" : "" }}">
                                 <a href="{{ route("admin.brands.index") }}">
@@ -126,17 +115,6 @@
                             </li>
                         @endcan
                     </ul>
-                </li>
-            @endcan
-            @can('company_access')
-                <li class="{{ request()->is("admin/companies") || request()->is("admin/companies/*") ? "active" : "" }}">
-                    <a href="{{ route("admin.companies.index") }}">
-                        <i class="fa-fw fas fa-building">
-
-                        </i>
-                        <span>{{ trans('cruds.company.title') }}</span>
-
-                    </a>
                 </li>
             @endcan
             @can('client_access')

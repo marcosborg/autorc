@@ -207,20 +207,6 @@
                                 </div>
                             </div>
                             <div class="col-md-3">
-                                <div class="form-group {{ $errors->has('seller_company') ? 'has-error' : '' }}">
-                                    <label for="seller_company_id">{{ trans('cruds.vehicle.fields.seller_company') }}</label>
-                                    <select class="form-control select2" name="seller_company_id" id="seller_company_id">
-                                        @foreach($seller_companies as $id => $entry)
-                                        <option value="{{ $id }}" {{ old('seller_company_id') == $id ? 'selected' : '' }}>{{ $entry }}</option>
-                                        @endforeach
-                                    </select>
-                                    @if($errors->has('seller_company'))
-                                    <span class="help-block" role="alert">{{ $errors->first('seller_company') }}</span>
-                                    @endif
-                                    <span class="help-block">{{ trans('cruds.vehicle.fields.seller_company_helper') }}</span>
-                                </div>
-                            </div>
-                            <div class="col-md-3">
                                 <div class="form-group {{ $errors->has('buyer_client') ? 'has-error' : '' }}">
                                     <label for="buyer_client_id">{{ trans('cruds.vehicle.fields.buyer_client') }}</label>
                                     <select class="form-control select2" name="buyer_client_id" id="buyer_client_id">
@@ -232,20 +218,6 @@
                                     <span class="help-block" role="alert">{{ $errors->first('buyer_client') }}</span>
                                     @endif
                                     <span class="help-block">{{ trans('cruds.vehicle.fields.buyer_client_helper') }}</span>
-                                </div>
-                            </div>
-                            <div class="col-md-3">
-                                <div class="form-group {{ $errors->has('buyer_company') ? 'has-error' : '' }}">
-                                    <label for="buyer_company_id">{{ trans('cruds.vehicle.fields.buyer_company') }}</label>
-                                    <select class="form-control select2" name="buyer_company_id" id="buyer_company_id">
-                                        @foreach($buyer_companies as $id => $entry)
-                                        <option value="{{ $id }}" {{ old('buyer_company_id') == $id ? 'selected' : '' }}>{{ $entry }}</option>
-                                        @endforeach
-                                    </select>
-                                    @if($errors->has('buyer_company'))
-                                    <span class="help-block" role="alert">{{ $errors->first('buyer_company') }}</span>
-                                    @endif
-                                    <span class="help-block">{{ trans('cruds.vehicle.fields.buyer_company_helper') }}</span>
                                 </div>
                             </div>
                         </div>

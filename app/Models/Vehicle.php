@@ -40,9 +40,7 @@ class Vehicle extends Model implements HasMedia
         'color',
         'kilometers',
         'seller_client_id',
-        'seller_company_id',
         'buyer_client_id',
-        'buyer_company_id',
         'purchase_and_sale_agreement',
         'copy_of_the_citizen_card',
         'tax_identification_card',
@@ -97,19 +95,9 @@ class Vehicle extends Model implements HasMedia
         return $this->belongsTo(Client::class, 'seller_client_id');
     }
 
-    public function seller_company()
-    {
-        return $this->belongsTo(Company::class, 'seller_company_id');
-    }
-
     public function buyer_client()
     {
         return $this->belongsTo(Client::class, 'buyer_client_id');
-    }
-
-    public function buyer_company()
-    {
-        return $this->belongsTo(Company::class, 'buyer_company_id');
     }
 
     public function getDateAttribute($value)

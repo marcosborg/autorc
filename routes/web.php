@@ -31,23 +31,11 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.', 'namespace' => 'Admin', 'mi
     Route::post('users/process-csv-import', 'UsersController@processCsvImport')->name('users.processCsvImport');
     Route::resource('users', 'UsersController');
 
-    // Company
-    Route::delete('companies/destroy', 'CompanyController@massDestroy')->name('companies.massDestroy');
-    Route::post('companies/parse-csv-import', 'CompanyController@parseCsvImport')->name('companies.parseCsvImport');
-    Route::post('companies/process-csv-import', 'CompanyController@processCsvImport')->name('companies.processCsvImport');
-    Route::resource('companies', 'CompanyController');
-
     // Countries
     Route::delete('countries/destroy', 'CountriesController@massDestroy')->name('countries.massDestroy');
     Route::post('countries/parse-csv-import', 'CountriesController@parseCsvImport')->name('countries.parseCsvImport');
     Route::post('countries/process-csv-import', 'CountriesController@processCsvImport')->name('countries.processCsvImport');
     Route::resource('countries', 'CountriesController');
-
-    // Company Type
-    Route::delete('company-types/destroy', 'CompanyTypeController@massDestroy')->name('company-types.massDestroy');
-    Route::post('company-types/parse-csv-import', 'CompanyTypeController@parseCsvImport')->name('company-types.parseCsvImport');
-    Route::post('company-types/process-csv-import', 'CompanyTypeController@processCsvImport')->name('company-types.processCsvImport');
-    Route::resource('company-types', 'CompanyTypeController');
 
     // Client
     Route::delete('clients/destroy', 'ClientController@massDestroy')->name('clients.massDestroy');

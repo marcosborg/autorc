@@ -41,6 +41,30 @@ class UpdateClientRequest extends FormRequest
                 'string',
                 'nullable',
             ],
+            'company_name' => [
+                'string',
+                'nullable',
+            ],
+            'company_vat' => [
+                'string',
+                'nullable',
+            ],
+            'company_address' => [
+                'string',
+                'nullable',
+            ],
+            'company_location' => [
+                'string',
+                'nullable',
+            ],
+            'company_zip' => [
+                'string',
+                'nullable',
+            ],
+            'company_phone' => [
+                'string',
+                'nullable',
+            ],
         ];
     }
 }

@@ -43,14 +43,6 @@
                                 </tr>
                                 <tr>
                                     <th>
-                                        {{ trans('cruds.client.fields.company') }}
-                                    </th>
-                                    <td>
-                                        {{ $client->company->name ?? '' }}
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <th>
                                         {{ trans('cruds.client.fields.address') }}
                                     </th>
                                     <td>
@@ -95,6 +87,70 @@
                                     </th>
                                     <td>
                                         {{ $client->country->name ?? '' }}
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <th>
+                                        {{ trans('cruds.client.fields.company_name') }}
+                                    </th>
+                                    <td>
+                                        {{ $client->company_name }}
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <th>
+                                        {{ trans('cruds.client.fields.company_vat') }}
+                                    </th>
+                                    <td>
+                                        {{ $client->company_vat }}
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <th>
+                                        {{ trans('cruds.client.fields.company_address') }}
+                                    </th>
+                                    <td>
+                                        {{ $client->company_address }}
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <th>
+                                        {{ trans('cruds.client.fields.company_location') }}
+                                    </th>
+                                    <td>
+                                        {{ $client->company_location }}
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <th>
+                                        {{ trans('cruds.client.fields.company_zip') }}
+                                    </th>
+                                    <td>
+                                        {{ $client->company_zip }}
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <th>
+                                        {{ trans('cruds.client.fields.company_phone') }}
+                                    </th>
+                                    <td>
+                                        {{ $client->company_phone }}
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <th>
+                                        {{ trans('cruds.client.fields.company_email') }}
+                                    </th>
+                                    <td>
+                                        {{ $client->company_email }}
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <th>
+                                        {{ trans('cruds.client.fields.company_country') }}
+                                    </th>
+                                    <td>
+                                        {{ $client->company_country->name ?? '' }}
                                     </td>
                                 </tr>
                                 <tr>
