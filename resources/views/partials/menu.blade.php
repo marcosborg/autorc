@@ -114,6 +114,28 @@
                                 </a>
                             </li>
                         @endcan
+                        @can('carrier_access')
+                            <li class="{{ request()->is("admin/carriers") || request()->is("admin/carriers/*") ? "active" : "" }}">
+                                <a href="{{ route("admin.carriers.index") }}">
+                                    <i class="fa-fw fas fa-truck-moving">
+
+                                    </i>
+                                    <span>{{ trans('cruds.carrier.title') }}</span>
+
+                                </a>
+                            </li>
+                        @endcan
+                        @can('pickup_state_access')
+                            <li class="{{ request()->is("admin/pickup-states") || request()->is("admin/pickup-states/*") ? "active" : "" }}">
+                                <a href="{{ route("admin.pickup-states.index") }}">
+                                    <i class="fa-fw fas fa-truck-loading">
+
+                                    </i>
+                                    <span>{{ trans('cruds.pickupState.title') }}</span>
+
+                                </a>
+                            </li>
+                        @endcan
                     </ul>
                 </li>
             @endcan
@@ -135,6 +157,17 @@
 
                         </i>
                         <span>{{ trans('cruds.vehicle.title') }}</span>
+
+                    </a>
+                </li>
+            @endcan
+            @can('pickup_access')
+                <li class="{{ request()->is("admin/pickups") || request()->is("admin/pickups/*") ? "active" : "" }}">
+                    <a href="{{ route("admin.pickups.index") }}">
+                        <i class="fa-fw fas fa-truck-loading">
+
+                        </i>
+                        <span>{{ trans('cruds.pickup.title') }}</span>
 
                     </a>
                 </li>

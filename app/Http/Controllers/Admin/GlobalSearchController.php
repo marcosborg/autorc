@@ -9,7 +9,7 @@ use Illuminate\Support\Str;
 class GlobalSearchController extends Controller
 {
     private $models = [
-
+        'Pickup' => 'cruds.pickup.title',
     ];
 
     public function search(Request $request)

@@ -70,6 +70,26 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.', 'namespace' => 'Admin', 'mi
     Route::post('payment-statuses/process-csv-import', 'PaymentStatusController@processCsvImport')->name('payment-statuses.processCsvImport');
     Route::resource('payment-statuses', 'PaymentStatusController');
 
+    // Pickup
+    Route::delete('pickups/destroy', 'PickupController@massDestroy')->name('pickups.massDestroy');
+    Route::post('pickups/media', 'PickupController@storeMedia')->name('pickups.storeMedia');
+    Route::post('pickups/ckmedia', 'PickupController@storeCKEditorImages')->name('pickups.storeCKEditorImages');
+    Route::post('pickups/parse-csv-import', 'PickupController@parseCsvImport')->name('pickups.parseCsvImport');
+    Route::post('pickups/process-csv-import', 'PickupController@processCsvImport')->name('pickups.processCsvImport');
+    Route::resource('pickups', 'PickupController');
+
+    // Carrier
+    Route::delete('carriers/destroy', 'CarrierController@massDestroy')->name('carriers.massDestroy');
+    Route::post('carriers/parse-csv-import', 'CarrierController@parseCsvImport')->name('carriers.parseCsvImport');
+    Route::post('carriers/process-csv-import', 'CarrierController@processCsvImport')->name('carriers.processCsvImport');
+    Route::resource('carriers', 'CarrierController');
+
+    // Pickup State
+    Route::delete('pickup-states/destroy', 'PickupStateController@massDestroy')->name('pickup-states.massDestroy');
+    Route::post('pickup-states/parse-csv-import', 'PickupStateController@parseCsvImport')->name('pickup-states.parseCsvImport');
+    Route::post('pickup-states/process-csv-import', 'PickupStateController@processCsvImport')->name('pickup-states.processCsvImport');
+    Route::resource('pickup-states', 'PickupStateController');
+
     Route::get('system-calendar', 'SystemCalendarController@index')->name('systemCalendar');
     Route::get('global-search', 'GlobalSearchController@search')->name('globalSearch');
     Route::get('messenger', 'MessengerController@index')->name('messenger.index');

@@ -28,4 +28,14 @@ Route::group(['prefix' => 'v1', 'as' => 'api.', 'namespace' => 'Api\V1\Admin', '
 
     // Payment Status
     Route::apiResource('payment-statuses', 'PaymentStatusApiController');
+
+    // Pickup
+    Route::post('pickups/media', 'PickupApiController@storeMedia')->name('pickups.storeMedia');
+    Route::apiResource('pickups', 'PickupApiController');
+
+    // Carrier
+    Route::apiResource('carriers', 'CarrierApiController');
+
+    // Pickup State
+    Route::apiResource('pickup-states', 'PickupStateApiController');
 });
