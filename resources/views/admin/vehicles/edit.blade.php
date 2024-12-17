@@ -108,35 +108,125 @@
                                 </div>
                             </div>
                         </div>
-                        <h3>Documents</h3>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <div class="form-group {{ $errors->has('suplier') ? 'has-error' : '' }}">
+                                            <label for="suplier_id">{{ trans('cruds.vehicle.fields.suplier') }}</label>
+                                            <select class="form-control select2" name="suplier_id" id="suplier_id">
+                                                @foreach($supliers as $id => $entry)
+                                                <option value="{{ $id }}" {{ (old('suplier_id') ? old('suplier_id') : $vehicle->suplier->id ?? '') == $id ? 'selected' : '' }}>{{ $entry }}</option>
+                                                @endforeach
+                                            </select>
+                                            @if($errors->has('suplier'))
+                                                <span class="help-block" role="alert">{{ $errors->first('suplier') }}</span>
+                                            @endif
+                                            <span class="help-block">{{ trans('cruds.vehicle.fields.suplier_helper') }}</span>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="form-group {{ $errors->has('purchase_price') ? 'has-error' : '' }}">
+                                            <label for="purchase_price">{{ trans('cruds.vehicle.fields.purchase_price') }}</label>
+                                            <input class="form-control" type="number" name="purchase_price" id="purchase_price" value="{{ old('purchase_price', $vehicle->purchase_price) }}" step="0.01">
+                                            @if($errors->has('purchase_price'))
+                                                <span class="help-block" role="alert">{{ $errors->first('purchase_price') }}</span>
+                                            @endif
+                                            <span class="help-block">{{ trans('cruds.vehicle.fields.purchase_price_helper') }}</span>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="form-group {{ $errors->has('payment_status') ? 'has-error' : '' }}">
+                                            <label for="payment_status_id">{{ trans('cruds.vehicle.fields.payment_status') }}</label>
+                                            <select class="form-control select2" name="payment_status_id" id="payment_status_id">
+                                                @foreach($payment_statuses as $id => $entry)
+                                                <option value="{{ $id }}" {{ (old('payment_status_id') ? old('payment_status_id') : $vehicle->payment_status->id ?? '') == $id ? 'selected' : '' }}>{{ $entry }}</option>
+                                                @endforeach
+                                            </select>
+                                            @if($errors->has('payment_status'))
+                                                <span class="help-block" role="alert">{{ $errors->first('payment_status') }}</span>
+                                            @endif
+                                            <span class="help-block">{{ trans('cruds.vehicle.fields.payment_status_helper') }}</span>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="form-group {{ $errors->has('payment_date') ? 'has-error' : '' }}">
+                                            <label for="payment_date">{{ trans('cruds.vehicle.fields.payment_date') }}</label>
+                                            <input class="form-control date" type="text" name="payment_date" id="payment_date" value="{{ old('payment_date', $vehicle->payment_date) }}">
+                                            @if($errors->has('payment_date'))
+                                                <span class="help-block" role="alert">{{ $errors->first('payment_date') }}</span>
+                                            @endif
+                                            <span class="help-block">{{ trans('cruds.vehicle.fields.payment_date_helper') }}</span>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-12">
+                                        <div class="panel panel-default">
+                                            <div class="panel-body">
+                                                <div class="row">
+                                                    <div class="col-md-4">
+                                                        <div class="form-group">
+                                                            <label>New payment</label>
+                                                            <input type="date" id="invoice_date" class="form-control" style="margin-bottom: 5px;">
+                                                            <input type="number" id="invoice_amount" class="form-control" style="margin-bottom: 5px;">
+                                                            <input type="text" id="invoice_obs" class="form-control" style="margin-bottom: 5px;">
+                                                            <button type="button" class="btn btn-success btn-sm" onclick="newPayment()">Save</button>
+                                                            <input type="hidden" class="form-control" name="amount_paid" id="amount_paid" value="{{ old('amount_paid') }}">
+                                                        </div>
+                                                    </div>
+                                                    <div id="payments_container"></div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group {{ $errors->has('invoice') ? 'has-error' : '' }}">
+                                    <label for="invoice">{{ trans('cruds.vehicle.fields.invoice') }}</label>
+                                    <div class="needsclick dropzone" id="invoice-dropzone">
+                                    </div>
+                                    @if($errors->has('invoice'))
+                                        <span class="help-block" role="alert">{{ $errors->first('invoice') }}</span>
+                                    @endif
+                                    <span class="help-block">{{ trans('cruds.vehicle.fields.invoice_helper') }}</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-3">
+                                <div class="form-group {{ $errors->has('seller_client') ? 'has-error' : '' }}">
+                                    <label for="seller_client_id">{{ trans('cruds.vehicle.fields.seller_client') }}</label>
+                                    <select class="form-control select2" name="seller_client_id" id="seller_client_id">
+                                        @foreach($seller_clients as $id => $entry)
+                                        <option value="{{ $id }}" {{ (old('seller_client_id') ? old('seller_client_id') : $vehicle->seller_client->id ?? '') == $id ? 'selected' : '' }}>{{ $entry }}</option>
+                                        @endforeach
+                                    </select>
+                                    @if($errors->has('seller_client'))
+                                    <span class="help-block" role="alert">{{ $errors->first('seller_client') }}</span>
+                                    @endif
+                                    <span class="help-block">{{ trans('cruds.vehicle.fields.seller_client_helper') }}</span>
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="form-group {{ $errors->has('buyer_client') ? 'has-error' : '' }}">
+                                    <label for="buyer_client_id">{{ trans('cruds.vehicle.fields.buyer_client') }}</label>
+                                    <select class="form-control select2" name="buyer_client_id" id="buyer_client_id">
+                                        @foreach($buyer_clients as $id => $entry)
+                                        <option value="{{ $id }}" {{ (old('buyer_client_id') ? old('buyer_client_id') : $vehicle->buyer_client->id ?? '') == $id ? 'selected' : '' }}>{{ $entry }}</option>
+                                        @endforeach
+                                    </select>
+                                    @if($errors->has('buyer_client'))
+                                    <span class="help-block" role="alert">{{ $errors->first('buyer_client') }}</span>
+                                    @endif
+                                    <span class="help-block">{{ trans('cruds.vehicle.fields.buyer_client_helper') }}</span>
+                                </div>
+                            </div>
+                        </div>
+                        <h3>Documents & photos</h3>
                         <div class="panel panel-default">
                             <div class="panel-body">
                                 <div class="row">
                                     <div class="col-md-4">
-                                        <div class="form-group {{ $errors->has('seller_client') ? 'has-error' : '' }}">
-                                            <label for="seller_client_id">{{ trans('cruds.vehicle.fields.seller_client') }}</label>
-                                            <select class="form-control select2" name="seller_client_id" id="seller_client_id">
-                                                @foreach($seller_clients as $id => $entry)
-                                                <option value="{{ $id }}" {{ (old('seller_client_id') ? old('seller_client_id') : $vehicle->seller_client->id ?? '') == $id ? 'selected' : '' }}>{{ $entry }}</option>
-                                                @endforeach
-                                            </select>
-                                            @if($errors->has('seller_client'))
-                                            <span class="help-block" role="alert">{{ $errors->first('seller_client') }}</span>
-                                            @endif
-                                            <span class="help-block">{{ trans('cruds.vehicle.fields.seller_client_helper') }}</span>
-                                        </div>
-                                        <div class="form-group {{ $errors->has('buyer_client') ? 'has-error' : '' }}">
-                                            <label for="buyer_client_id">{{ trans('cruds.vehicle.fields.buyer_client') }}</label>
-                                            <select class="form-control select2" name="buyer_client_id" id="buyer_client_id">
-                                                @foreach($buyer_clients as $id => $entry)
-                                                <option value="{{ $id }}" {{ (old('buyer_client_id') ? old('buyer_client_id') : $vehicle->buyer_client->id ?? '') == $id ? 'selected' : '' }}>{{ $entry }}</option>
-                                                @endforeach
-                                            </select>
-                                            @if($errors->has('buyer_client'))
-                                            <span class="help-block" role="alert">{{ $errors->first('buyer_client') }}</span>
-                                            @endif
-                                            <span class="help-block">{{ trans('cruds.vehicle.fields.buyer_client_helper') }}</span>
-                                        </div>
                                         <div class="form-group {{ $errors->has('purchase_and_sale_agreement') ? 'has-error' : '' }}">
                                             <div>
                                                 <input type="hidden" name="purchase_and_sale_agreement" value="0">
@@ -144,7 +234,7 @@
                                                 <label for="purchase_and_sale_agreement" style="font-weight: 400">{{ trans('cruds.vehicle.fields.purchase_and_sale_agreement') }}</label>
                                             </div>
                                             @if($errors->has('purchase_and_sale_agreement'))
-                                            <span class="help-block" role="alert">{{ $errors->first('purchase_and_sale_agreement') }}</span>
+                                                <span class="help-block" role="alert">{{ $errors->first('purchase_and_sale_agreement') }}</span>
                                             @endif
                                             <span class="help-block">{{ trans('cruds.vehicle.fields.purchase_and_sale_agreement_helper') }}</span>
                                         </div>
@@ -155,7 +245,7 @@
                                                 <label for="copy_of_the_citizen_card" style="font-weight: 400">{{ trans('cruds.vehicle.fields.copy_of_the_citizen_card') }}</label>
                                             </div>
                                             @if($errors->has('copy_of_the_citizen_card'))
-                                            <span class="help-block" role="alert">{{ $errors->first('copy_of_the_citizen_card') }}</span>
+                                                <span class="help-block" role="alert">{{ $errors->first('copy_of_the_citizen_card') }}</span>
                                             @endif
                                             <span class="help-block">{{ trans('cruds.vehicle.fields.copy_of_the_citizen_card_helper') }}</span>
                                         </div>
@@ -166,7 +256,7 @@
                                                 <label for="tax_identification_card" style="font-weight: 400">{{ trans('cruds.vehicle.fields.tax_identification_card') }}</label>
                                             </div>
                                             @if($errors->has('tax_identification_card'))
-                                            <span class="help-block" role="alert">{{ $errors->first('tax_identification_card') }}</span>
+                                                <span class="help-block" role="alert">{{ $errors->first('tax_identification_card') }}</span>
                                             @endif
                                             <span class="help-block">{{ trans('cruds.vehicle.fields.tax_identification_card_helper') }}</span>
                                         </div>
@@ -177,7 +267,7 @@
                                                 <label for="copy_of_the_stamp_duty_receipt" style="font-weight: 400">{{ trans('cruds.vehicle.fields.copy_of_the_stamp_duty_receipt') }}</label>
                                             </div>
                                             @if($errors->has('copy_of_the_stamp_duty_receipt'))
-                                            <span class="help-block" role="alert">{{ $errors->first('copy_of_the_stamp_duty_receipt') }}</span>
+                                                <span class="help-block" role="alert">{{ $errors->first('copy_of_the_stamp_duty_receipt') }}</span>
                                             @endif
                                             <span class="help-block">{{ trans('cruds.vehicle.fields.copy_of_the_stamp_duty_receipt_helper') }}</span>
                                         </div>
@@ -188,7 +278,7 @@
                                                 <label for="vehicle_registration_document" style="font-weight: 400">{{ trans('cruds.vehicle.fields.vehicle_registration_document') }}</label>
                                             </div>
                                             @if($errors->has('vehicle_registration_document'))
-                                            <span class="help-block" role="alert">{{ $errors->first('vehicle_registration_document') }}</span>
+                                                <span class="help-block" role="alert">{{ $errors->first('vehicle_registration_document') }}</span>
                                             @endif
                                             <span class="help-block">{{ trans('cruds.vehicle.fields.vehicle_registration_document_helper') }}</span>
                                         </div>
@@ -199,7 +289,7 @@
                                                 <label for="vehicle_ownership_title" style="font-weight: 400">{{ trans('cruds.vehicle.fields.vehicle_ownership_title') }}</label>
                                             </div>
                                             @if($errors->has('vehicle_ownership_title'))
-                                            <span class="help-block" role="alert">{{ $errors->first('vehicle_ownership_title') }}</span>
+                                                <span class="help-block" role="alert">{{ $errors->first('vehicle_ownership_title') }}</span>
                                             @endif
                                             <span class="help-block">{{ trans('cruds.vehicle.fields.vehicle_ownership_title_helper') }}</span>
                                         </div>
@@ -210,7 +300,7 @@
                                                 <label for="vehicle_keys" style="font-weight: 400">{{ trans('cruds.vehicle.fields.vehicle_keys') }}</label>
                                             </div>
                                             @if($errors->has('vehicle_keys'))
-                                            <span class="help-block" role="alert">{{ $errors->first('vehicle_keys') }}</span>
+                                                <span class="help-block" role="alert">{{ $errors->first('vehicle_keys') }}</span>
                                             @endif
                                             <span class="help-block">{{ trans('cruds.vehicle.fields.vehicle_keys_helper') }}</span>
                                         </div>
@@ -221,7 +311,7 @@
                                                 <label for="vehicle_manuals" style="font-weight: 400">{{ trans('cruds.vehicle.fields.vehicle_manuals') }}</label>
                                             </div>
                                             @if($errors->has('vehicle_manuals'))
-                                            <span class="help-block" role="alert">{{ $errors->first('vehicle_manuals') }}</span>
+                                                <span class="help-block" role="alert">{{ $errors->first('vehicle_manuals') }}</span>
                                             @endif
                                             <span class="help-block">{{ trans('cruds.vehicle.fields.vehicle_manuals_helper') }}</span>
                                         </div>
@@ -232,7 +322,7 @@
                                                 <label for="release_of_reservation_or_mortgage" style="font-weight: 400">{{ trans('cruds.vehicle.fields.release_of_reservation_or_mortgage') }}</label>
                                             </div>
                                             @if($errors->has('release_of_reservation_or_mortgage'))
-                                            <span class="help-block" role="alert">{{ $errors->first('release_of_reservation_or_mortgage') }}</span>
+                                                <span class="help-block" role="alert">{{ $errors->first('release_of_reservation_or_mortgage') }}</span>
                                             @endif
                                             <span class="help-block">{{ trans('cruds.vehicle.fields.release_of_reservation_or_mortgage_helper') }}</span>
                                         </div>
@@ -243,7 +333,7 @@
                                                 <label for="leasing_agreement" style="font-weight: 400">{{ trans('cruds.vehicle.fields.leasing_agreement') }}</label>
                                             </div>
                                             @if($errors->has('leasing_agreement'))
-                                            <span class="help-block" role="alert">{{ $errors->first('leasing_agreement') }}</span>
+                                                <span class="help-block" role="alert">{{ $errors->first('leasing_agreement') }}</span>
                                             @endif
                                             <span class="help-block">{{ trans('cruds.vehicle.fields.leasing_agreement_helper') }}</span>
                                         </div>
@@ -251,7 +341,7 @@
                                             <label for="date">{{ trans('cruds.vehicle.fields.date') }}</label>
                                             <input class="form-control date" type="text" name="date" id="date" value="{{ old('date', $vehicle->date) }}">
                                             @if($errors->has('date'))
-                                            <span class="help-block" role="alert">{{ $errors->first('date') }}</span>
+                                                <span class="help-block" role="alert">{{ $errors->first('date') }}</span>
                                             @endif
                                             <span class="help-block">{{ trans('cruds.vehicle.fields.date_helper') }}</span>
                                         </div>
@@ -262,9 +352,18 @@
                                             <div class="needsclick dropzone" id="documents-dropzone">
                                             </div>
                                             @if($errors->has('documents'))
-                                            <span class="help-block" role="alert">{{ $errors->first('documents') }}</span>
+                                                <span class="help-block" role="alert">{{ $errors->first('documents') }}</span>
                                             @endif
                                             <span class="help-block">{{ trans('cruds.vehicle.fields.documents_helper') }}</span>
+                                        </div>
+                                        <div class="form-group {{ $errors->has('photos') ? 'has-error' : '' }}">
+                                            <label for="photos">{{ trans('cruds.vehicle.fields.photos') }}</label>
+                                            <div class="needsclick dropzone" id="photos-dropzone">
+                                            </div>
+                                            @if($errors->has('photos'))
+                                                <span class="help-block" role="alert">{{ $errors->first('photos') }}</span>
+                                            @endif
+                                            <span class="help-block">{{ trans('cruds.vehicle.fields.photos_helper') }}</span>
                                         </div>
                                     </div>
                                 </div>
@@ -276,7 +375,7 @@
                                     <label for="pending">{{ trans('cruds.vehicle.fields.pending') }}</label>
                                     <textarea class="form-control ckeditor" name="pending" id="pending">{!! old('pending', $vehicle->pending) !!}</textarea>
                                     @if($errors->has('pending'))
-                                    <span class="help-block" role="alert">{{ $errors->first('pending') }}</span>
+                                        <span class="help-block" role="alert">{{ $errors->first('pending') }}</span>
                                     @endif
                                     <span class="help-block">{{ trans('cruds.vehicle.fields.pending_helper') }}</span>
                                 </div>
@@ -286,7 +385,7 @@
                                     <label for="additional_items">{{ trans('cruds.vehicle.fields.additional_items') }}</label>
                                     <textarea class="form-control ckeditor" name="additional_items" id="additional_items">{!! old('additional_items', $vehicle->additional_items) !!}</textarea>
                                     @if($errors->has('additional_items'))
-                                    <span class="help-block" role="alert">{{ $errors->first('additional_items') }}</span>
+                                        <span class="help-block" role="alert">{{ $errors->first('additional_items') }}</span>
                                     @endif
                                     <span class="help-block">{{ trans('cruds.vehicle.fields.additional_items_helper') }}</span>
                                 </div>
@@ -311,127 +410,331 @@
 @section('scripts')
 <script>
     var uploadedDocumentsMap = {}
-    Dropzone.options.documentsDropzone = {
-        url: '{{ route('admin.vehicles.storeMedia') }}',
-        maxFilesize: 2000, // MB
-        addRemoveLinks: true,
-        headers: {
-            'X-CSRF-TOKEN': "{{ csrf_token() }}"
-        },
-        params: {
-            size: 2000
-        },
-        success: function(file, response) {
-            $('form').append('<input type="hidden" name="documents[]" value="' + response.name + '">')
-            uploadedDocumentsMap[file.name] = response.name
-        },
-        removedfile: function(file) {
-            file.previewElement.remove()
-            var name = ''
-            if (typeof file.file_name !== 'undefined') {
-                name = file.file_name
-            } else {
-                name = uploadedDocumentsMap[file.name]
+Dropzone.options.documentsDropzone = {
+    url: '{{ route('admin.vehicles.storeMedia') }}',
+    maxFilesize: 2000, // MB
+    addRemoveLinks: true,
+    headers: {
+      'X-CSRF-TOKEN': "{{ csrf_token() }}"
+    },
+    params: {
+      size: 2000
+    },
+    success: function (file, response) {
+      $('form').append('<input type="hidden" name="documents[]" value="' + response.name + '">')
+      uploadedDocumentsMap[file.name] = response.name
+    },
+    removedfile: function (file) {
+      file.previewElement.remove()
+      var name = ''
+      if (typeof file.file_name !== 'undefined') {
+        name = file.file_name
+      } else {
+        name = uploadedDocumentsMap[file.name]
+      }
+      $('form').find('input[name="documents[]"][value="' + name + '"]').remove()
+    },
+    init: function () {
+@if(isset($vehicle) && $vehicle->documents)
+          var files =
+            {!! json_encode($vehicle->documents) !!}
+              for (var i in files) {
+              var file = files[i]
+              this.options.addedfile.call(this, file)
+              file.previewElement.classList.add('dz-complete')
+              $('form').append('<input type="hidden" name="documents[]" value="' + file.file_name + '">')
             }
-            $('form').find('input[name="documents[]"][value="' + name + '"]').remove()
-        },
-        init: function() {
-            @if(isset($vehicle) && $vehicle->documents)
-            var files = {!! json_encode($vehicle->documents) !!}
-            for (var i in files) {
-                var file = files[i]
-                this.options.addedfile.call(this, file)
-                file.previewElement.classList.add('dz-complete')
-                $('form').append('<input type="hidden" name="documents[]" value="' + file.file_name + '">')
-            }
-            @endif
-        },
-        error: function(file, response) {
-            if ($.type(response) === 'string') {
-                var message = response //dropzone sends it's own error messages in string
-            } else {
-                var message = response.errors.file
-            }
-            file.previewElement.classList.add('dz-error')
-            _ref = file.previewElement.querySelectorAll('[data-dz-errormessage]')
-            _results = []
-            for (_i = 0, _len = _ref.length; _i < _len; _i++) {
-                node = _ref[_i]
-                _results.push(node.textContent = message)
-            }
+@endif
+    },
+     error: function (file, response) {
+         if ($.type(response) === 'string') {
+             var message = response //dropzone sends it's own error messages in string
+         } else {
+             var message = response.errors.file
+         }
+         file.previewElement.classList.add('dz-error')
+         _ref = file.previewElement.querySelectorAll('[data-dz-errormessage]')
+         _results = []
+         for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+             node = _ref[_i]
+             _results.push(node.textContent = message)
+         }
 
-            return _results
-        }
-    }
+         return _results
+     }
+}
 </script>
 <script>
-    $(document).ready(function() {
-        function SimpleUploadAdapter(editor) {
-            editor.plugins.get('FileRepository').createUploadAdapter = function(loader) {
-                return {
-                    upload: function() {
-                        return loader.file
-                            .then(function(file) {
-                                return new Promise(function(resolve, reject) {
-                                    // Init request
-                                    var xhr = new XMLHttpRequest();
-                                    xhr.open('POST', '{{ route('admin.vehicles.storeCKEditorImages') }}', true);
-                                    xhr.setRequestHeader('x-csrf-token', window._token);
-                                    xhr.setRequestHeader('Accept', 'application/json');
-                                    xhr.responseType = 'json';
+    $(document).ready(function () {
+  function SimpleUploadAdapter(editor) {
+    editor.plugins.get('FileRepository').createUploadAdapter = function(loader) {
+      return {
+        upload: function() {
+          return loader.file
+            .then(function (file) {
+              return new Promise(function(resolve, reject) {
+                // Init request
+                var xhr = new XMLHttpRequest();
+                xhr.open('POST', '{{ route('admin.vehicles.storeCKEditorImages') }}', true);
+                xhr.setRequestHeader('x-csrf-token', window._token);
+                xhr.setRequestHeader('Accept', 'application/json');
+                xhr.responseType = 'json';
 
-                                    // Init listeners
-                                    var genericErrorText = `Couldn't upload file: ${ file.name }.`;
-                                    xhr.addEventListener('error', function() {
-                                        reject(genericErrorText)
-                                    });
-                                    xhr.addEventListener('abort', function() {
-                                        reject()
-                                    });
-                                    xhr.addEventListener('load', function() {
-                                        var response = xhr.response;
+                // Init listeners
+                var genericErrorText = `Couldn't upload file: ${ file.name }.`;
+                xhr.addEventListener('error', function() { reject(genericErrorText) });
+                xhr.addEventListener('abort', function() { reject() });
+                xhr.addEventListener('load', function() {
+                  var response = xhr.response;
 
-                                        if (!response || xhr.status !== 201) {
-                                            return reject(response && response.message ? `${genericErrorText}\n${xhr.status} ${response.message}` : `${genericErrorText}\n ${xhr.status} ${xhr.statusText}`);
-                                        }
+                  if (!response || xhr.status !== 201) {
+                    return reject(response && response.message ? `${genericErrorText}\n${xhr.status} ${response.message}` : `${genericErrorText}\n ${xhr.status} ${xhr.statusText}`);
+                  }
 
-                                        $('form').append('<input type="hidden" name="ck-media[]" value="' + response.id + '">');
+                  $('form').append('<input type="hidden" name="ck-media[]" value="' + response.id + '">');
 
-                                        resolve({
-                                            default: response.url
-                                        });
-                                    });
+                  resolve({ default: response.url });
+                });
 
-                                    if (xhr.upload) {
-                                        xhr.upload.addEventListener('progress', function(e) {
-                                            if (e.lengthComputable) {
-                                                loader.uploadTotal = e.total;
-                                                loader.uploaded = e.loaded;
-                                            }
-                                        });
-                                    }
-
-                                    // Send request
-                                    var data = new FormData();
-                                    data.append('upload', file);
-                                    data.append('crud_id', '{{ $vehicle->id ?? 0 }}');
-                                    xhr.send(data);
-                                });
-                            })
+                if (xhr.upload) {
+                  xhr.upload.addEventListener('progress', function(e) {
+                    if (e.lengthComputable) {
+                      loader.uploadTotal = e.total;
+                      loader.uploaded = e.loaded;
                     }
-                };
-            }
-        }
-
-        var allEditors = document.querySelectorAll('.ckeditor');
-        for (var i = 0; i < allEditors.length; ++i) {
-            ClassicEditor.create(
-                allEditors[i], {
-                    extraPlugins: [SimpleUploadAdapter]
+                  });
                 }
-            );
+
+                // Send request
+                var data = new FormData();
+                data.append('upload', file);
+                data.append('crud_id', '{{ $vehicle->id ?? 0 }}');
+                xhr.send(data);
+              });
+            })
         }
-    });
+      };
+    }
+  }
+
+  var allEditors = document.querySelectorAll('.ckeditor');
+  for (var i = 0; i < allEditors.length; ++i) {
+    ClassicEditor.create(
+      allEditors[i], {
+        extraPlugins: [SimpleUploadAdapter]
+      }
+    );
+  }
+});
 </script>
 
+<script>
+    var uploadedPhotosMap = {}
+Dropzone.options.photosDropzone = {
+    url: '{{ route('admin.vehicles.storeMedia') }}',
+    maxFilesize: 20, // MB
+    acceptedFiles: '.jpeg,.jpg,.png,.gif',
+    addRemoveLinks: true,
+    headers: {
+      'X-CSRF-TOKEN': "{{ csrf_token() }}"
+    },
+    params: {
+      size: 20,
+      width: 4096,
+      height: 4096
+    },
+    success: function (file, response) {
+      $('form').append('<input type="hidden" name="photos[]" value="' + response.name + '">')
+      uploadedPhotosMap[file.name] = response.name
+    },
+    removedfile: function (file) {
+      console.log(file)
+      file.previewElement.remove()
+      var name = ''
+      if (typeof file.file_name !== 'undefined') {
+        name = file.file_name
+      } else {
+        name = uploadedPhotosMap[file.name]
+      }
+      $('form').find('input[name="photos[]"][value="' + name + '"]').remove()
+    },
+    init: function () {
+@if(isset($vehicle) && $vehicle->photos)
+      var files = {!! json_encode($vehicle->photos) !!}
+          for (var i in files) {
+          var file = files[i]
+          this.options.addedfile.call(this, file)
+          this.options.thumbnail.call(this, file, file.preview ?? file.preview_url)
+          file.previewElement.classList.add('dz-complete')
+          $('form').append('<input type="hidden" name="photos[]" value="' + file.file_name + '">')
+        }
+@endif
+    },
+     error: function (file, response) {
+         if ($.type(response) === 'string') {
+             var message = response //dropzone sends it's own error messages in string
+         } else {
+             var message = response.errors.file
+         }
+         file.previewElement.classList.add('dz-error')
+         _ref = file.previewElement.querySelectorAll('[data-dz-errormessage]')
+         _results = []
+         for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+             node = _ref[_i]
+             _results.push(node.textContent = message)
+         }
+
+         return _results
+     }
+}
+
+</script>
+<script>
+    var uploadedInvoiceMap = {}
+Dropzone.options.invoiceDropzone = {
+    url: '{{ route('admin.vehicles.storeMedia') }}',
+    maxFilesize: 20, // MB
+    addRemoveLinks: true,
+    headers: {
+      'X-CSRF-TOKEN': "{{ csrf_token() }}"
+    },
+    params: {
+      size: 20
+    },
+    success: function (file, response) {
+      $('form').append('<input type="hidden" name="invoice[]" value="' + response.name + '">')
+      uploadedInvoiceMap[file.name] = response.name
+    },
+    removedfile: function (file) {
+      file.previewElement.remove()
+      var name = ''
+      if (typeof file.file_name !== 'undefined') {
+        name = file.file_name
+      } else {
+        name = uploadedInvoiceMap[file.name]
+      }
+      $('form').find('input[name="invoice[]"][value="' + name + '"]').remove()
+    },
+    init: function () {
+@if(isset($vehicle) && $vehicle->invoice)
+          var files =
+            {!! json_encode($vehicle->invoice) !!}
+              for (var i in files) {
+              var file = files[i]
+              this.options.addedfile.call(this, file)
+              file.previewElement.classList.add('dz-complete')
+              $('form').append('<input type="hidden" name="invoice[]" value="' + file.file_name + '">')
+            }
+@endif
+    },
+     error: function (file, response) {
+         if ($.type(response) === 'string') {
+             var message = response //dropzone sends it's own error messages in string
+         } else {
+             var message = response.errors.file
+         }
+         file.previewElement.classList.add('dz-error')
+         _ref = file.previewElement.querySelectorAll('[data-dz-errormessage]')
+         _results = []
+         for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+             node = _ref[_i]
+             _results.push(node.textContent = message)
+         }
+
+         return _results
+     }
+}
+</script>
+<script>
+    $(() => {
+        let amount_paid = $('#amount_paid').val();
+        if (amount_paid) {
+        try {
+            amount_paid = JSON.parse(amount_paid);
+            if (Array.isArray(amount_paid)) {
+                updatePaymentsList(amount_paid);
+            }
+        } catch (error) {
+            console.error("Erro ao parsear amount_paid ao carregar a página:", error);
+        }
+    }
+    })
+
+    newPayment = () => {
+        let amount_paid = $('#amount_paid').val();
+        let invoice_date = $('#invoice_date').val();
+        let invoice_amount = $('#invoice_amount').val();
+        let invoice_obs = $('#invoice_obs').val();
+        if (!invoice_date || !invoice_amount) {
+            Swal.fire({
+                text: "A data e o valor são obrigatórios",
+                icon: "error"
+            });
+        } else {
+            let data = {
+                invoice_date: invoice_date,
+                invoice_amount: invoice_amount,
+                invoice_obs: invoice_obs
+            };
+            // Verifica e trata o valor de amount_paid
+            if (amount_paid) {
+                try {
+                    // Converte para array, assumindo que seja uma string JSON válida
+                    amount_paid = JSON.parse(amount_paid);
+                    if (!Array.isArray(amount_paid)) {
+                        console.warn("amount_paid não é um array válido. Inicializando como array vazio.");
+                        amount_paid = [];
+                    }
+                } catch (error) {
+                    console.error("Erro ao parsear amount_paid:", error);
+                    amount_paid = [];
+                }
+            } else {
+                // Se o valor do input estiver vazio, inicializa como array vazio
+                amount_paid = [];
+            }
+
+            // Adiciona o novo dado ao array
+            amount_paid.push(data);
+
+            // Atualiza o valor do input para refletir o array atualizado
+            $('#amount_paid').val(JSON.stringify(amount_paid));
+
+            updatePaymentsList(amount_paid);
+
+            $('#invoice_date').val('');
+            $('#invoice_amount').val('');
+            $('#invoice_obs').val('');
+
+            console.log(amount_paid); // Verifica o valor atualizado no console
+            
+        }
+        
+    }
+
+    function updatePaymentsList(payments) {
+    let paymentsList = `
+        <div class="col-md-8">
+            <label>Payments</label>
+            <ul class="list-group">
+    `;
+
+    payments.forEach((payment, index) => {
+        paymentsList += `
+            <li class="list-group-item">
+                ${parseFloat(payment.invoice_amount).toFixed(2)}€ em ${payment.invoice_date}.
+                ${payment.invoice_obs ? "(" + payment.invoice_obs + ")" : ""}
+            </li>
+        `;
+    });
+
+    paymentsList += `
+            </ul>
+        </div>
+    `;
+
+    // Atualiza o HTML no elemento com id `payments_container`
+    $('#payments_container').html(paymentsList);
+}
+</script>
 @endsection
