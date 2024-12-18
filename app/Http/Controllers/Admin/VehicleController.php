@@ -9,7 +9,6 @@ use App\Http\Requests\MassDestroyVehicleRequest;
 use App\Http\Requests\StoreVehicleRequest;
 use App\Http\Requests\UpdateVehicleRequest;
 use App\Models\Brand;
-use App\Models\Client;
 use App\Models\PaymentStatus;
 use App\Models\Suplier;
 use App\Models\Vehicle;
@@ -28,7 +27,7 @@ class VehicleController extends Controller
         abort_if(Gate::denies('vehicle_access'), Response::HTTP_FORBIDDEN, '403 Forbidden');
 
         if ($request->ajax()) {
-            $query = Vehicle::with(['brand', 'buyer_client', 'suplier', 'payment_status'])->select(sprintf('%s.*', (new Vehicle)->table));
+            $query = Vehicle::with(['brand', 'suplier', 'payment_status'])->select(sprintf('%s.*', (new Vehicle)->table));
             $table = Datatables::of($query);
 
             $table->addColumn('placeholder', '&nbsp;');
@@ -77,13 +76,6 @@ class VehicleController extends Controller
             });
             $table->editColumn('kilometers', function ($row) {
                 return $row->kilometers ? $row->kilometers : '';
-            });
-            $table->addColumn('seller_client_name', function ($row) {
-                return $row->seller_client ? $row->seller_client->name : '';
-            });
-
-            $table->addColumn('buyer_client_name', function ($row) {
-                return $row->buyer_client ? $row->buyer_client->name : '';
             });
 
             $table->editColumn('purchase_and_sale_agreement', function ($row) {
@@ -166,17 +158,17 @@ class VehicleController extends Controller
                 return $row->amount_paid ? $row->amount_paid : '';
             });
 
-            $table->rawColumns(['actions', 'placeholder', 'brand', 'seller_client', 'buyer_client', 'purchase_and_sale_agreement', 'copy_of_the_citizen_card', 'tax_identification_card', 'copy_of_the_stamp_duty_receipt', 'vehicle_registration_document', 'vehicle_ownership_title', 'vehicle_keys', 'vehicle_manuals', 'release_of_reservation_or_mortgage', 'leasing_agreement', 'documents', 'photos', 'suplier', 'invoice', 'payment_status']);
+            $table->rawColumns(['actions', 'placeholder', 'brand', 'seller_client', 'purchase_and_sale_agreement', 'copy_of_the_citizen_card', 'tax_identification_card', 'copy_of_the_stamp_duty_receipt', 'vehicle_registration_document', 'vehicle_ownership_title', 'vehicle_keys', 'vehicle_manuals', 'release_of_reservation_or_mortgage', 'leasing_agreement', 'documents', 'photos', 'suplier', 'invoice', 'payment_status']);
 
             return $table->make(true);
         }
 
         $brands           = Brand::get();
-        $clients          = Client::get();
+
         $supliers         = Suplier::get();
         $payment_statuses = PaymentStatus::get();
 
-        return view('admin.vehicles.index', compact('brands', 'clients', 'supliers', 'payment_statuses'));
+        return view('admin.vehicles.index', compact('brands', 'supliers', 'payment_statuses'));
     }
 
     public function create()
@@ -185,20 +177,20 @@ class VehicleController extends Controller
 
         $brands = Brand::pluck('name', 'id')->prepend(trans('global.pleaseSelect'), '');
 
-        $seller_clients = Client::pluck('name', 'id')->prepend(trans('global.pleaseSelect'), '');
-
-        $buyer_clients = Client::pluck('name', 'id')->prepend(trans('global.pleaseSelect'), '');
-
         $supliers = Suplier::pluck('name', 'id')->prepend(trans('global.pleaseSelect'), '');
 
         $payment_statuses = PaymentStatus::pluck('name', 'id')->prepend(trans('global.pleaseSelect'), '');
 
-        return view('admin.vehicles.create', compact('brands', 'buyer_clients', 'payment_statuses', 'seller_clients', 'supliers'));
+        return view('admin.vehicles.create', compact('brands', 'payment_statuses', 'supliers'));
     }
 
     public function store(StoreVehicleRequest $request)
     {
         $vehicle = Vehicle::create($request->all());
+
+        foreach ($request->input('initial', []) as $file) {
+            $vehicle->addMedia(storage_path('tmp/uploads/' . basename($file)))->toMediaCollection('initial');
+        }
 
         foreach ($request->input('documents', []) as $file) {
             $vehicle->addMedia(storage_path('tmp/uploads/' . basename($file)))->toMediaCollection('documents');
@@ -225,17 +217,13 @@ class VehicleController extends Controller
 
         $brands = Brand::pluck('name', 'id')->prepend(trans('global.pleaseSelect'), '');
 
-        $seller_clients = Client::pluck('name', 'id')->prepend(trans('global.pleaseSelect'), '');
-
-        $buyer_clients = Client::pluck('name', 'id')->prepend(trans('global.pleaseSelect'), '');
-
         $supliers = Suplier::pluck('name', 'id')->prepend(trans('global.pleaseSelect'), '');
 
         $payment_statuses = PaymentStatus::pluck('name', 'id')->prepend(trans('global.pleaseSelect'), '');
 
-        $vehicle->load('brand', 'seller_client', 'buyer_client', 'suplier', 'payment_status');
+        $vehicle->load('brand', 'suplier', 'payment_status');
 
-        return view('admin.vehicles.edit', compact('brands', 'buyer_clients', 'payment_statuses', 'seller_clients', 'supliers', 'vehicle'));
+        return view('admin.vehicles.edit', compact('brands', 'payment_statuses', 'supliers', 'vehicle'));
     }
 
     public function update(UpdateVehicleRequest $request, Vehicle $vehicle)
@@ -270,6 +258,20 @@ class VehicleController extends Controller
             }
         }
 
+        if (count($vehicle->inicial) > 0) {
+            foreach ($vehicle->inicial as $media) {
+                if (! in_array($media->file_name, $request->input('inicial', []))) {
+                    $media->delete();
+                }
+            }
+        }
+        $media = $vehicle->photos->pluck('file_name')->toArray();
+        foreach ($request->input('inicial', []) as $file) {
+            if (count($media) === 0 || ! in_array($file, $media)) {
+                $vehicle->addMedia(storage_path('tmp/uploads/' . basename($file)))->toMediaCollection('inicial');
+            }
+        }
+
         if (count($vehicle->invoice) > 0) {
             foreach ($vehicle->invoice as $media) {
                 if (! in_array($media->file_name, $request->input('invoice', []))) {
@@ -291,7 +293,7 @@ class VehicleController extends Controller
     {
         abort_if(Gate::denies('vehicle_show'), Response::HTTP_FORBIDDEN, '403 Forbidden');
 
-        $vehicle->load('brand', 'seller_client', 'buyer_client', 'suplier', 'payment_status');
+        $vehicle->load('brand', 'suplier', 'payment_status');
 
         return view('admin.vehicles.show', compact('vehicle'));
     }

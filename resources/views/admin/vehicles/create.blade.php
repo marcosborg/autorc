@@ -189,35 +189,14 @@
                                     @endif
                                     <span class="help-block">{{ trans('cruds.vehicle.fields.invoice_helper') }}</span>
                                 </div>
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="col-md-3">
-                                <div class="form-group {{ $errors->has('seller_client') ? 'has-error' : '' }}">
-                                    <label for="seller_client_id">{{ trans('cruds.vehicle.fields.seller_client') }}</label>
-                                    <select class="form-control select2" name="seller_client_id" id="seller_client_id">
-                                        @foreach($seller_clients as $id => $entry)
-                                        <option value="{{ $id }}" {{ old('seller_client_id') == $id ? 'selected' : '' }}>{{ $entry }}</option>
-                                        @endforeach
-                                    </select>
-                                    @if($errors->has('seller_client'))
-                                    <span class="help-block" role="alert">{{ $errors->first('seller_client') }}</span>
+                                <div class="form-group {{ $errors->has('inicial') ? 'has-error' : '' }}">
+                                    <label for="inicial">{{ trans('cruds.vehicle.fields.inicial') }}</label>
+                                    <div class="needsclick dropzone" id="inicial-dropzone">
+                                    </div>
+                                    @if($errors->has('invoice'))
+                                        <span class="help-block" role="alert">{{ $errors->first('invoice') }}</span>
                                     @endif
-                                    <span class="help-block">{{ trans('cruds.vehicle.fields.seller_client_helper') }}</span>
-                                </div>
-                            </div>
-                            <div class="col-md-3">
-                                <div class="form-group {{ $errors->has('buyer_client') ? 'has-error' : '' }}">
-                                    <label for="buyer_client_id">{{ trans('cruds.vehicle.fields.buyer_client') }}</label>
-                                    <select class="form-control select2" name="buyer_client_id" id="buyer_client_id">
-                                        @foreach($buyer_clients as $id => $entry)
-                                        <option value="{{ $id }}" {{ old('buyer_client_id') == $id ? 'selected' : '' }}>{{ $entry }}</option>
-                                        @endforeach
-                                    </select>
-                                    @if($errors->has('buyer_client'))
-                                    <span class="help-block" role="alert">{{ $errors->first('buyer_client') }}</span>
-                                    @endif
-                                    <span class="help-block">{{ trans('cruds.vehicle.fields.buyer_client_helper') }}</span>
+                                    <span class="help-block">{{ trans('cruds.vehicle.fields.invoice_helper') }}</span>
                                 </div>
                             </div>
                         </div>
@@ -567,6 +546,67 @@ Dropzone.options.photosDropzone = {
           this.options.thumbnail.call(this, file, file.preview ?? file.preview_url)
           file.previewElement.classList.add('dz-complete')
           $('form').append('<input type="hidden" name="photos[]" value="' + file.file_name + '">')
+        }
+@endif
+    },
+     error: function (file, response) {
+         if ($.type(response) === 'string') {
+             var message = response //dropzone sends it's own error messages in string
+         } else {
+             var message = response.errors.file
+         }
+         file.previewElement.classList.add('dz-error')
+         _ref = file.previewElement.querySelectorAll('[data-dz-errormessage]')
+         _results = []
+         for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+             node = _ref[_i]
+             _results.push(node.textContent = message)
+         }
+
+         return _results
+     }
+}
+
+</script>
+<script>
+    var uploadedInicialMap = {}
+Dropzone.options.inicialDropzone = {
+    url: '{{ route('admin.vehicles.storeMedia') }}',
+    maxFilesize: 20, // MB
+    acceptedFiles: '.jpeg,.jpg,.png,.gif',
+    addRemoveLinks: true,
+    headers: {
+      'X-CSRF-TOKEN': "{{ csrf_token() }}"
+    },
+    params: {
+      size: 20,
+      width: 4096,
+      height: 4096
+    },
+    success: function (file, response) {
+      $('form').append('<input type="hidden" name="inicial[]" value="' + response.name + '">')
+      uploadedInicialMap[file.name] = response.name
+    },
+    removedfile: function (file) {
+      console.log(file)
+      file.previewElement.remove()
+      var name = ''
+      if (typeof file.file_name !== 'undefined') {
+        name = file.file_name
+      } else {
+        name = uploadedInicialMap[file.name]
+      }
+      $('form').find('input[name="inicial[]"][value="' + name + '"]').remove()
+    },
+    init: function () {
+@if(isset($vehicle) && $vehicle->inicial)
+      var files = {!! json_encode($vehicle->inicial) !!}
+          for (var i in files) {
+          var file = files[i]
+          this.options.addedfile.call(this, file)
+          this.options.thumbnail.call(this, file, file.preview ?? file.preview_url)
+          file.previewElement.classList.add('dz-complete')
+          $('form').append('<input type="hidden" name="inicial[]" value="' + file.file_name + '">')
         }
 @endif
     },

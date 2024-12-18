@@ -229,6 +229,8 @@ return [
             'payment_status_helper'                     => ' ',
             'amount_paid'                               => 'Amount Paid',
             'amount_paid_helper'                        => ' ',
+            'inicial'                                   => 'Inicial photos',
+            'inicial_helper'                            => ' ',
         ],
     ],
     'suplier' => [

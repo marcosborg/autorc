@@ -39,8 +39,6 @@ class Vehicle extends Model implements HasMedia
         'license_date',
         'color',
         'kilometers',
-        'seller_client_id',
-        'buyer_client_id',
         'purchase_and_sale_agreement',
         'copy_of_the_citizen_card',
         'tax_identification_card',
@@ -88,16 +86,6 @@ class Vehicle extends Model implements HasMedia
     public function setLicenseDateAttribute($value)
     {
         $this->attributes['license_date'] = $value ? Carbon::createFromFormat(config('panel.date_format'), $value)->format('Y-m-d') : null;
-    }
-
-    public function seller_client()
-    {
-        return $this->belongsTo(Client::class, 'seller_client_id');
-    }
-
-    public function buyer_client()
-    {
-        return $this->belongsTo(Client::class, 'buyer_client_id');
     }
 
     public function getDateAttribute($value)

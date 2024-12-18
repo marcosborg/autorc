@@ -99,38 +99,6 @@
                                 </tr>
                                 <tr>
                                     <th>
-                                        {{ trans('cruds.vehicle.fields.seller_client') }}
-                                    </th>
-                                    <td>
-                                        {{ $vehicle->seller_client->name ?? '' }}
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <th>
-                                        {{ trans('cruds.vehicle.fields.seller_company') }}
-                                    </th>
-                                    <td>
-                                        {{ $vehicle->seller_company->name ?? '' }}
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <th>
-                                        {{ trans('cruds.vehicle.fields.buyer_client') }}
-                                    </th>
-                                    <td>
-                                        {{ $vehicle->buyer_client->name ?? '' }}
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <th>
-                                        {{ trans('cruds.vehicle.fields.buyer_company') }}
-                                    </th>
-                                    <td>
-                                        {{ $vehicle->buyer_company->name ?? '' }}
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <th>
                                         {{ trans('cruds.vehicle.fields.purchase_and_sale_agreement') }}
                                     </th>
                                     <td>

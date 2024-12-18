@@ -58,12 +58,6 @@
                                     {{ trans('cruds.vehicle.fields.kilometers') }}
                                 </th>
                                 <th>
-                                    {{ trans('cruds.vehicle.fields.seller_client') }}
-                                </th>
-                                <th>
-                                    {{ trans('cruds.vehicle.fields.buyer_client') }}
-                                </th>
-                                <th>
                                     &nbsp;
                                 </th>
                             </tr>
@@ -103,22 +97,6 @@
                                 </td>
                                 <td>
                                     <input class="search" type="text" placeholder="{{ trans('global.search') }}">
-                                </td>
-                                <td>
-                                    <select class="search">
-                                        <option value>{{ trans('global.all') }}</option>
-                                        @foreach($clients as $key => $item)
-                                            <option value="{{ $item->name }}">{{ $item->name }}</option>
-                                        @endforeach
-                                    </select>
-                                </td>
-                                <td>
-                                    <select class="search">
-                                        <option value>{{ trans('global.all') }}</option>
-                                        @foreach($clients as $key => $item)
-                                            <option value="{{ $item->name }}">{{ $item->name }}</option>
-                                        @endforeach
-                                    </select>
                                 </td>
                                 <td>
                                 </td>
@@ -188,8 +166,6 @@
 { data: 'license_date', name: 'license_date' },
 { data: 'color', name: 'color' },
 { data: 'kilometers', name: 'kilometers' },
-{ data: 'seller_client_name', name: 'seller_client.name' },
-{ data: 'buyer_client_name', name: 'buyer_client.name' },
 { data: 'actions', name: '{{ trans('global.actions') }}' }
     ],
     orderCellsTop: true,
